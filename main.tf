@@ -15,6 +15,7 @@ data "template_file" "swagger" {
     acl                        = var.s3_acl
     bucket                     = var.s3_bucket
     openapi_specification_path = var.openapi_specification_path
+    profile                    = var.profile
     version                    = local.swagger_ui_version
   }
 }
@@ -22,7 +23,7 @@ data "template_file" "swagger" {
 resource "null_resource" "swagger" {
   triggers = {
     rendered_template = data.template_file.swagger.rendered
-    version           = var.swagger_ui_version
+    version           = local.swagger_ui_version
   }
 
   provisioner "local-exec" {
