@@ -22,8 +22,9 @@ data "template_file" "swagger" {
 
 resource "null_resource" "swagger" {
   triggers = {
-    rendered_template = data.template_file.swagger.rendered
-    version           = local.swagger_ui_version
+    rendered_template     = data.template_file.swagger.rendered
+    version               = local.swagger_ui_version
+    openapi_specification = "${sha1(file(var.openapi_specification_path))}"
   }
 
   provisioner "local-exec" {
