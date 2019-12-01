@@ -3,32 +3,46 @@ data "external" "swagger_ui_latest_version" {
 }
 
 locals {
-  swagger_ui                                = "swagger-ui"
-  swagger_ui_custom_specification_file_name = "api.yml"
-  swagger_ui_version                        = "${var.swagger_ui_version != "latest" ? var.swagger_ui_version : lookup(data.external.swagger_ui_latest_version.result, "version")}"
+  openapi_spec_url   = "${var.openapi_spec_url != "" ? var.openapi_spec_url : var.openapi_spec_path != "" ? basename(var.openapi_spec_path) : ""}"
+  swagger_ui_version = "${var.swagger_ui_version != "latest" ? var.swagger_ui_version : lookup(data.external.swagger_ui_latest_version.result, "version")}"
 }
 
-data "template_file" "swagger" {
+data "template_file" "install_swagger_ui" {
   template = "${file("${path.module}/templates/swagger-ui-s3.sh.tpl")}"
   vars = {
-    path                       = path.module
-    acl                        = var.s3_acl
-    bucket                     = var.s3_bucket
-    openapi_specification_path = var.openapi_specification_path
-    profile                    = var.profile
-    version                    = local.swagger_ui_version
+    path               = path.module
+    acl                = var.s3_acl
+    bucket_path        = var.s3_bucket_path
+    openapi_spec_path  = var.openapi_spec_path
+    openapi_spec_url   = local.openapi_spec_url
+    swagger_ui_version = local.swagger_ui_version
+    profile            = var.profile
+  }
+}
+
+data "template_file" "destroy_swagger_ui" {
+  template = "${file("${path.module}/templates/swagger-ui-s3-destroy.sh.tpl")}"
+  vars = {
+    bucket_path = var.s3_bucket_path
+    profile     = var.profile
   }
 }
 
 resource "null_resource" "swagger" {
   triggers = {
-    rendered_template     = data.template_file.swagger.rendered
-    version               = local.swagger_ui_version
-    openapi_specification = "${sha1(file(var.openapi_specification_path))}"
+    rendered_template  = data.template_file.install_swagger_ui.rendered
+    swagger_ui_version = local.swagger_ui_version
+    openapi_spec_sha   = "${var.openapi_spec_path != "" ? sha1(file(var.openapi_spec_path)) : ""}"
   }
 
   provisioner "local-exec" {
-    command     = data.template_file.swagger.rendered
+    command     = data.template_file.install_swagger_ui.rendered
+    interpreter = var.interpreter
+  }
+
+  provisioner "local-exec" {
+    when        = "destroy"
+    command     = data.template_file.destroy_swagger_ui.rendered
     interpreter = var.interpreter
   }
 }
