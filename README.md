@@ -15,13 +15,17 @@ Special thanks to https://gist.github.com/denniswebb for his swagger-ui tf gist.
 
 ### Required
 
-- openapi_specification_path
+- openapi_spec_path
   - Path to the custom openapi specification document to install
-- s3_bucket
-  - The s3 bucket to install swagger ui and the openapi specification specified
+- s3_bucket_path
+  - The s3 bucket path to install swagger ui and the openapi specification specified.
+    e.g. super-awesome-bucket or super-awesome-bucket/yahaha
 
 ### Optional
 
+- openapi_spec_url
+  - Default value is an empty string (which results in the swagger ui using a relative path)
+  - "URL to the custom openapi specification document for swagger ui to point to. Will perform a relative path lookup if not specified
 - swagger_ui_version
   - Default value is latest
   - The version of swagger ui to use. Taken from https://github.com/swagger-api/swagger-ui/releases
@@ -37,10 +41,10 @@ Special thanks to https://gist.github.com/denniswebb for his swagger-ui tf gist.
 
 ## Outputs
 
+- openapi_spec_s3_dest_path
+  - The s3 path to the openapi specification
 - swagger_ui_version
   - The swagger ui version being used"
-- openapi_specification_path
-  - The path to the openapi specification
 
 ## Examples
 
@@ -50,8 +54,8 @@ Special thanks to https://gist.github.com/denniswebb for his swagger-ui tf gist.
 module "swagger_ui" {
   source = "github.com/whitebread-cloud/terraform-aws-s3-swagger-ui"
 
-  openapi_specification_path = "${path.cwd}/../specifications/${var.game}.yml"
-  s3_bucket                  = var.s3_swagger_bucket
+  openapi_spec_path = "${path.cwd}/../specifications/${var.game}.yml"
+  s3_bucket_path                  = var.s3_swagger_bucket
 }
 ```
 
@@ -64,10 +68,10 @@ interpreter. The only interpreter tested with windows is the git-bash interprete
 module "swagger_ui" {
   source = "github.com/whitebread-cloud/terraform-aws-s3-swagger-ui"
 
-  openapi_specification_path = "${path.cwd}/../specifications/${var.game}.yml"
+  openapi_spec_path = "${path.cwd}/../specifications/${var.game}.yml"
   swagger_ui_version         = "v3.24.0"
   s3_acl                     = "public"
-  s3_bucket                  = var.s3_swagger_bucket
+  s3_bucket_path                  = var.s3_swagger_bucket
   interpreter                = ["C:/Program Files/Git/bin/bash.exe", "-c"]
   profile                    = "blizzard-quotes"
 }
