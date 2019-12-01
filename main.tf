@@ -32,7 +32,7 @@ resource "null_resource" "swagger" {
   triggers = {
     rendered_template  = data.template_file.install_swagger_ui.rendered
     swagger_ui_version = local.swagger_ui_version
-    openapi_spec_path  = "${var.openapi_spec_path != "" ? sha1(file(var.openapi_spec_path)) : ""}"
+    openapi_spec_sha   = "${var.openapi_spec_path != "" ? sha1(file(var.openapi_spec_path)) : ""}"
   }
 
   provisioner "local-exec" {
