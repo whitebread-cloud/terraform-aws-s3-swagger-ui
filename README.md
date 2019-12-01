@@ -64,8 +64,6 @@ Special thanks to https://gist.github.com/denniswebb for his swagger-ui tf gist.
 
 ## Outputs
 
-- openapi_spec_s3_dest_path
-  - The s3 path to the openapi specification
 - openapi_spec_url
   - The url to the openapi specification
 - swagger_ui_version
