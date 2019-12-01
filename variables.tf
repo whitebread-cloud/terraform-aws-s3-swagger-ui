@@ -1,4 +1,5 @@
 variable "openapi_spec_path" {
+  default     = ""
   description = "Path to the custom openapi specification document to install"
 }
 
