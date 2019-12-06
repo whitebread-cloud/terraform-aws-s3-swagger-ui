@@ -20,7 +20,7 @@ variable "s3_acl" {
 }
 
 variable "s3_bucket_path" {
-  description = "The s3 bucket_path to install swagger ui and the openapi specification specified. e.g. super-awesome-bucket_path or super-awesome-bucket_path/yahaha"
+  description = "The s3 bucket path to install swagger ui and the openapi specification specified. e.g. super-awesome-bucket_path or super-awesome-bucket_path/yahaha"
 }
 
 variable "interpreter" {
