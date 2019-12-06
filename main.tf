@@ -3,7 +3,7 @@ data "external" "swagger_ui_latest_version" {
 }
 
 locals {
-  openapi_spec_url   = "${var.openapi_spec_url != "" ? var.openapi_spec_url : var.openapi_spec_path != "" ? basename(var.openapi_spec_path) : ""}"
+  openapi_spec_url   = "${var.openapi_spec_url != "" ? var.openapi_spec_url : var.openapi_spec_paths != [] ? basename(var.openapi_spec_paths) : ""}"
   swagger_ui_version = "${var.swagger_ui_version != "latest" ? var.swagger_ui_version : lookup(data.external.swagger_ui_latest_version.result, "version")}"
 }
 
@@ -13,7 +13,7 @@ data "template_file" "install_swagger_ui" {
     path               = path.module
     acl                = var.s3_acl
     bucket_path        = var.s3_bucket_path
-    openapi_spec_path  = var.openapi_spec_path
+    openapi_spec_paths = "( %{for path in var.openapi_spec_paths~} \"${path}\" %{endfor~})"
     openapi_spec_url   = local.openapi_spec_url
     swagger_ui_version = local.swagger_ui_version
     profile            = var.profile
@@ -32,7 +32,7 @@ resource "null_resource" "swagger" {
   triggers = {
     rendered_template  = data.template_file.install_swagger_ui.rendered
     swagger_ui_version = local.swagger_ui_version
-    openapi_spec_sha   = "${var.openapi_spec_path != "" ? sha1(file(var.openapi_spec_path)) : ""}"
+    #openapi_spec_sha   = "${var.openapi_spec_paths != [] ? sha1(file(var.openapi_spec_paths)) : ""}"
   }
 
   provisioner "local-exec" {

@@ -34,15 +34,14 @@ Special thanks to https://gist.github.com/denniswebb for his swagger-ui tf gist.
 
 ### Optional
 
-- openapi_spec_path
-  - Default value is an empty string
+- openapi_spec_paths
+  - Default value is an empty list
     - Default valut results in the default openapi specification url being used
   - Path to the custom openapi specification document to install
-    - E.g. /data/wc3/v1.yml
+    - E.g. ["/data/wc3/v1.yml"] or ["/data/wc3/v1.yml", "/data/wc3/v2.yml"]
 - openapi_spec_url
   - Default value is an empty string
-    - Default value results in the default openapi specification url being used or a relative path
-      to the openapi_spec_path if openapi_spec_path is specified
+    - Default value results in the default openapi specification url being used or a relative path to the openapi_spec_paths if openapi_spec_paths is specified
   - URL to the custom openapi specification document for swagger ui to point to.
     - E.g. https://swagger.wc3.blizzardquotes.com/v1.yml
 - swagger_ui_version
@@ -107,8 +106,8 @@ which the swagger ui will reference using a relative path.
 module "swagger_ui" {
   source = "github.com/whitebread-cloud/terraform-aws-s3-swagger-ui"
 
-  s3_bucket_path    = "super-awesome-swag-bucket"
-  openapi_spec_path = "${path.cwd}/specifications/wc3/v1.yml"
+  s3_bucket_path     = "super-awesome-swag-bucket"
+  openapi_spec_paths = ["${path.cwd}/specifications/wc3/v1.yml"]
 }
 ```
 
@@ -122,9 +121,9 @@ Allows for users to easily view or download the raw openapi specification.
 module "swagger_ui" {
   source = "github.com/whitebread-cloud/terraform-aws-s3-swagger-ui"
 
-  s3_bucket_path    = "super-awesome-swag-bucket"
-  openapi_spec_path = "${path.cwd}/specifications/wc3/v1.yml"
-  openapi_spec_url  = "https://swagger.wc3.blizzardquotes.com/v1.yml"
+  s3_bucket_path     = "super-awesome-swag-bucket"
+  openapi_spec_paths = ["${path.cwd}/specifications/wc3/v1.yml"]
+  openapi_spec_url   = "https://swagger.wc3.blizzardquotes.com/v1.yml"
 }
 ```
 
@@ -139,9 +138,9 @@ interpreter. The only interpreter tested with windows is the git-bash interprete
 module "swagger_ui" {
   source = "github.com/whitebread-cloud/terraform-aws-s3-swagger-ui"
 
-  s3_bucket_path    = "super-awesome-swag-bucket"
-  openapi_spec_path = "${path.cwd}/specifications/wc3/v1.yml"
-  openapi_spec_url  = "https://swagger.wc3.blizzardquotes.com/v1.yml"
+  s3_bucket_path     = "super-awesome-swag-bucket"
+  openapi_spec_paths = ["${path.cwd}/specifications/wc3/v1.yml"]
+  openapi_spec_url   = "https://swagger.wc3.blizzardquotes.com/v1.yml"
   swagger_ui_version = "v3.24.0"
   s3_acl             = "public-read"
 
