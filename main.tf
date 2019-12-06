@@ -3,8 +3,7 @@ data "external" "swagger_ui_latest_version" {
 }
 
 locals {
-  openapi_spec_url   = "${var.openapi_spec_url != "" ? var.openapi_spec_url : var.openapi_spec_paths != [] ? basename(var.openapi_spec_paths) : ""}"
-  swagger_ui_version = "${var.swagger_ui_version != "latest" ? var.swagger_ui_version : lookup(data.external.swagger_ui_latest_version.result, "version")}"
+  swagger_ui_version = var.swagger_ui_version != "latest" ? var.swagger_ui_version : lookup(data.external.swagger_ui_latest_version.result, "version")
 }
 
 data "template_file" "install_swagger_ui" {
@@ -13,8 +12,8 @@ data "template_file" "install_swagger_ui" {
     path               = path.module
     acl                = var.s3_acl
     bucket_path        = var.s3_bucket_path
-    openapi_spec_paths = "( ${join(" ", var.openapi_spec_paths)} )"
-    openapi_spec_url   = local.openapi_spec_url
+    openapi_spec_paths = "(${join(" ", var.openapi_spec_paths)})"
+    openapi_spec_urls  = "(${join(" ", var.openapi_spec_urls)})"
     swagger_ui_version = local.swagger_ui_version
     profile            = var.profile
   }

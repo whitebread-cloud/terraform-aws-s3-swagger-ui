@@ -4,9 +4,9 @@ variable "openapi_spec_paths" {
   description = "Paths to the custom openapi specification documents to install"
 }
 
-variable "openapi_spec_url" {
-  default     = ""
-  description = "URL to the custom openapi specification document for swagger ui to point to. Will perform a relative lookup if not specified"
+variable "openapi_spec_urls" {
+  default     = []
+  description = "URLs to the custom openapi specification document for swagger ui to point to"
 }
 
 variable "swagger_ui_version" {
