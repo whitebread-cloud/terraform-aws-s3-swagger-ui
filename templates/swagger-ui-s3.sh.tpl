@@ -23,9 +23,6 @@ if [ $${#OPENAPI_SPEC_PATHS[@]} > 1 ]; then
     urls_string+="{url: \"$bucket_path/$(basename $${path})\",  name: \"$(basename $${path})\"},"
   done
   urls_string="$${urls_string%?}]"
-
-  echo $urls_string
-
   sed -i "s@url:.*@urls: $urls_string,@" $DIR_PATH/$SWAGGER_TARGET/dist/index.html
 # User swagger ui url. This should always be true unless no openapi specifications
 elif [[ $${#OPENAPI_SPEC_PATHS[@]} == 1  || ! -z $OPENAPI_SPEC_URL ]]; then
@@ -35,7 +32,7 @@ fi
 aws s3 sync --profile $PROFILE --acl $ACL $DIR_PATH/$SWAGGER_TARGET/dist s3://$BUCKET_PATH
 
 for path in $${OPENAPI_SPEC_PATHS[@]}; do
-  aws s3 cp --profile $PROFILE --acl $ACL $${path} s3://$BUCKET_PATH/$(basename $${path})  
+  aws s3 cp --profile $PROFILE --acl $ACL $path s3://$BUCKET_PATH/$(basename $path)  
 done
 
 rm -rf $DIR_PATH/$SWAGGER_TARGET.tar.gz

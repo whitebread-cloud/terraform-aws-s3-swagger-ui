@@ -13,7 +13,7 @@ data "template_file" "install_swagger_ui" {
     path               = path.module
     acl                = var.s3_acl
     bucket_path        = var.s3_bucket_path
-    openapi_spec_paths = "( %{for path in var.openapi_spec_paths~} \"${path}\" %{endfor~})"
+    openapi_spec_paths = "( ${join(" ", var.openapi_spec_paths)} )"
     openapi_spec_url   = local.openapi_spec_url
     swagger_ui_version = local.swagger_ui_version
     profile            = var.profile
@@ -32,7 +32,10 @@ resource "null_resource" "swagger" {
   triggers = {
     rendered_template  = data.template_file.install_swagger_ui.rendered
     swagger_ui_version = local.swagger_ui_version
-    #openapi_spec_sha   = "${var.openapi_spec_paths != [] ? sha1(file(var.openapi_spec_paths)) : ""}"
+    openapi_spec_sha = sha1(join(" ", [
+      for path in var.openapi_spec_paths :
+      file(path)
+    ]))
   }
 
   provisioner "local-exec" {
