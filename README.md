@@ -10,15 +10,27 @@
     - [Install Swagger UI With URL](#install-swagger-ui-with-url)
     - [Install Swagger UI With Custom Specification](#install-swagger-ui-with-custom-specification)
     - [Install Swagger UI With URL And Custom Specification](#install-swagger-ui-with-url-and-custom-specification)
+    - [Install Swagger UI With URLs And Custom Specifications](#install-swagger-ui-with-urls-and-custom-specifications)
     - [Install Swagger UI With All Optional Variables](#install-swagger-ui-with-all-optional-variables)
 
 ## Summary
 
 Terraform module for installing swagger ui in an AWS S3 bucket.
-Can pass a custom openapi sepcification path to also upload an openapi
-specification to S3 and have swagger ui reference it.
+Can pass openapi specification paths and/or openapi specification urls.
 
-Use in conjunction with CloudFront to create an globally, easily accessible swagger ui for a service.
+Passing openapi specification paths will upload the openapi specification paths
+to s3 and create a relative path in the swagger ui using the basename of the file.
+
+Passing openapi specification urls will create an absolute path in the
+swagger ui for the url specified.
+
+openapi specification urls take precedence over openapi specification paths
+(openapi specifications are still uploaded) of the same index unless the openapi
+specification url is an empty string.
+You can reference openapi specification files located elsewhere as long as CORS
+is enabled in the location being referenced.
+
+Use in conjunction with CloudFront to create an globally, easily accessible swagger ui for services.
 
 Written using terraform .12.x.
 
@@ -34,17 +46,18 @@ Special thanks to https://gist.github.com/denniswebb for his swagger-ui tf gist.
 
 ### Optional
 
-- openapi_spec_path
-  - Default value is an empty string
-    - Default valut results in the default openapi specification url being used
+- openapi_spec_paths
+  - Default value is an empty list
+    - Default value results in the default openapi specification url being used
+      assuming openapi_spec_urls is also empty
   - Path to the custom openapi specification document to install
-    - E.g. /data/wc3/v1.yml
-- openapi_spec_url
-  - Default value is an empty string
-    - Default value results in the default openapi specification url being used or a relative path
-      to the openapi_spec_path if openapi_spec_path is specified
+    - E.g. ["/data/wc3/v1.yml"] or ["/data/wc3/v1.yml", "/data/wc3/v2.yml"]
+- openapi_spec_urls
+  - Default value is an empty list
+    - Default value results in the default openapi specification url being using
+      assuming openapi_spec_paths is also empty
   - URL to the custom openapi specification document for swagger ui to point to.
-    - E.g. https://swagger.wc3.blizzardquotes.com/v1.yml
+    - E.g. ["https://swagger.wc3.blizzardquotes.com/v1.yml"]
 - swagger_ui_version
   - Default value is latest
   - The version of swagger ui to use. Taken from https://github.com/swagger-api/swagger-ui/releases
@@ -64,8 +77,6 @@ Special thanks to https://gist.github.com/denniswebb for his swagger-ui tf gist.
 
 ## Outputs
 
-- openapi_spec_url
-  - The url to the openapi specification
 - swagger_ui_version
   - The swagger ui version being used
 
@@ -93,8 +104,8 @@ Requires CORS to be enabled where the openapi specification is hosted.
 module "swagger_ui" {
   source = "github.com/whitebread-cloud/terraform-aws-s3-swagger-ui"
 
-  s3_bucket_path   = "super-awesome-swag-bucket"
-  openapi_spec_url = "https://swagger.sc2.blizzardquotes.com/wc3/v1.yml"
+  s3_bucket_path    = "super-awesome-swag-bucket"
+  openapi_spec_urls = ["https://swagger.sc2.blizzardquotes.com/wc3/v1.yml"]
 }
 ```
 
@@ -107,24 +118,43 @@ which the swagger ui will reference using a relative path.
 module "swagger_ui" {
   source = "github.com/whitebread-cloud/terraform-aws-s3-swagger-ui"
 
-  s3_bucket_path    = "super-awesome-swag-bucket"
-  openapi_spec_path = "${path.cwd}/specifications/wc3/v1.yml"
+  s3_bucket_path     = "super-awesome-swag-bucket"
+  openapi_spec_paths = ["${path.cwd}/specifications/wc3/v1.yml"]
 }
 ```
 
 ### Install Swagger UI With URL And Custom Specification
 
 Install the swagger ui and inject an openapi specification which
-the swagger ui will reference using the url specified (or not...you do you, pal).
-Allows for users to easily view or download the raw openapi specification.
+the swagger ui will reference using the url specified instead of through
+a relative path.
 
 ```
 module "swagger_ui" {
   source = "github.com/whitebread-cloud/terraform-aws-s3-swagger-ui"
 
-  s3_bucket_path    = "super-awesome-swag-bucket"
-  openapi_spec_path = "${path.cwd}/specifications/wc3/v1.yml"
-  openapi_spec_url  = "https://swagger.wc3.blizzardquotes.com/v1.yml"
+  s3_bucket_path      = "super-awesome-swag-bucket"
+  openapi_spec_paths  = ["${path.cwd}/specifications/wc3/v1.yml"]
+  openapi_spec_urls   = ["https://swagger.wc3.blizzardquotes.com/v1.yml"]
+}
+```
+
+### Install Swagger UI With URLs And Custom Specifications
+
+Example demonstrating unique use case.
+
+Install the swagger ui and inject two openapi specifications which the
+swagger ui will reference using a relative path
+(empty string urls default to the path). Also point to another openapi
+specification in another location using the url specified.
+
+```
+module "swagger_ui" {
+  source = "github.com/whitebread-cloud/terraform-aws-s3-swagger-ui"
+
+  s3_bucket_path      = "super-awesome-swag-bucket"
+  openapi_spec_paths  = ["${path.cwd}/specifications/wc3/v1.yml", "${path.cwd}/specifications/wc3/v2.yml"]
+  openapi_spec_urls   = ["", "", "https://swagger.sc2.blizzardquotes.com/v1.yml"]
 }
 ```
 
@@ -139,9 +169,9 @@ interpreter. The only interpreter tested with windows is the git-bash interprete
 module "swagger_ui" {
   source = "github.com/whitebread-cloud/terraform-aws-s3-swagger-ui"
 
-  s3_bucket_path    = "super-awesome-swag-bucket"
-  openapi_spec_path = "${path.cwd}/specifications/wc3/v1.yml"
-  openapi_spec_url  = "https://swagger.wc3.blizzardquotes.com/v1.yml"
+  s3_bucket_path     = "super-awesome-swag-bucket"
+  openapi_spec_paths = ["${path.cwd}/specifications/wc3/v1.yml"]
+  openapi_spec_urls  = ["https://swagger.wc3.blizzardquotes.com/v1.yml"]
   swagger_ui_version = "v3.24.0"
   s3_acl             = "public-read"
 
