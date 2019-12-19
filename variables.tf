@@ -1,5 +1,5 @@
 variable "openapi_spec_paths" {
-  type        = "list"
+  type        = list(string)
   default     = []
   description = "Paths to the custom openapi specification documents to install"
 }
@@ -24,7 +24,7 @@ variable "s3_bucket_path" {
 }
 
 variable "interpreter" {
-  type        = "list"
+  type        = list(string)
   default     = []
   description = "List of interpreter arguments. See https://www.terraform.io/docs/provisioners/local-exec.html for more details"
 }
