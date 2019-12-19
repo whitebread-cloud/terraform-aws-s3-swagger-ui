@@ -43,7 +43,7 @@ resource "null_resource" "swagger" {
   }
 
   provisioner "local-exec" {
-    when        = "destroy"
+    when        = destroy
     command     = data.template_file.destroy_swagger_ui.rendered
     interpreter = var.interpreter
   }
