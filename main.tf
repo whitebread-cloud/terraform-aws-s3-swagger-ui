@@ -29,12 +29,15 @@ data "template_file" "destroy_swagger_ui" {
 
 resource "null_resource" "swagger" {
   triggers = {
-    rendered_template  = data.template_file.install_swagger_ui.rendered
+    s3_acl             = var.s3_acl
+    s3_bucket_path     = var.s3_bucket_path
+    template           = data.template_file.install_swagger_ui.template
     swagger_ui_version = local.swagger_ui_version
-    openapi_spec_sha = sha1(join(" ", [
+    openapi_spec_paths_sha = sha1(join(" ", [
       for path in var.openapi_spec_paths :
       file(path)
     ]))
+    openapi_spec_urls = var.openapi_spec_urls
   }
 
   provisioner "local-exec" {
