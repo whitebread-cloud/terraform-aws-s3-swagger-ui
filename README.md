@@ -50,13 +50,13 @@ Special thanks to https://gist.github.com/denniswebb for his swagger-ui tf gist.
   - Default value is an empty list
     - Default value results in the default openapi specification url being used
       assuming openapi_spec_urls is also empty
-  - Path to the custom openapi specification document to install
+  - Path to the custom openapi specification documents to install
     - E.g. ["/data/wc3/v1.yml"] or ["/data/wc3/v1.yml", "/data/wc3/v2.yml"]
 - openapi_spec_urls
   - Default value is an empty list
     - Default value results in the default openapi specification url being using
       assuming openapi_spec_paths is also empty
-  - URL to the custom openapi specification document for swagger ui to point to.
+  - URLs to the custom openapi specification documents for swagger ui to point to.
     - E.g. ["https://swagger.wc3.blizzardquotes.com/v1.yml"]
 - swagger_ui_version
   - Default value is latest
