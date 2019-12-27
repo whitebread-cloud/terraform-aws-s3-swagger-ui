@@ -6,7 +6,7 @@ variable "openapi_spec_paths" {
 
 variable "openapi_spec_urls" {
   default     = []
-  description = "URLs to the custom openapi specification document for swagger ui to point to"
+  description = "URLs to the custom openapi specifications documents for swagger ui to point to"
 }
 
 variable "swagger_ui_version" {
@@ -20,7 +20,7 @@ variable "s3_acl" {
 }
 
 variable "s3_bucket_path" {
-  description = "The s3 bucket path to install swagger ui and the openapi specification specified. e.g. super-awesome-bucket_path or super-awesome-bucket_path/yahaha"
+  description = "The s3 bucket path to install swagger ui and the openapi specifications specified. e.g. super-awesome-bucket_path or super-awesome-bucket_path/yahaha"
 }
 
 variable "interpreter" {
