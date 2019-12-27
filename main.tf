@@ -37,7 +37,7 @@ resource "null_resource" "swagger" {
       for path in var.openapi_spec_paths :
       file(path)
     ]))
-    openapi_spec_urls = var.openapi_spec_urls
+    openapi_spec_urls = join(" ", var.openapi_spec_urls)
   }
 
   provisioner "local-exec" {
