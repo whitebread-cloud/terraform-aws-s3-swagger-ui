@@ -47,7 +47,7 @@ resource "null_resource" "swagger" {
 
   provisioner "local-exec" {
     when        = destroy
-    command     = ${self.triggers.template}
+    command     = self.triggers.template
     interpreter = var.interpreter
   }
 }
