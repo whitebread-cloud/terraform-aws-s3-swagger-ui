@@ -41,7 +41,7 @@ resource "null_resource" "swagger" {
   }
 
   provisioner "local-exec" {
-    command     = data.template_file.install_swagger_ui.rendered
+    command     = self.triggers.template
     interpreter = var.interpreter
   }
 
