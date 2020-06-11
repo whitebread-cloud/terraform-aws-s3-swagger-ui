@@ -67,7 +67,7 @@ Special thanks to https://gist.github.com/denniswebb for his swagger-ui tf gist.
   - ACL associated with swagger ui. See https://docs.aws.amazon.com/cli/latest/reference/s3/sync.html for more details
     - E.g. public-read
 - interpreter
-  - Only required if using windows. Recommend using git bash
+  - Only required if using windows. Recommend using git bash. No longer necessary if using WSL 2
   - List of interpreter arguments. See https://www.terraform.io/docs/provisioners/local-exec.html for more details
     - E.g. ["C:/Program Files/Git/bin/bash.exe", "-c"]
 - profile

@@ -25,7 +25,7 @@ variable "s3_bucket_path" {
 
 variable "interpreter" {
   type        = list(string)
-  default     = []
+  default     = ["/usr/bin/env", "bash", "-c"]
   description = "List of interpreter arguments. See https://www.terraform.io/docs/provisioners/local-exec.html for more details"
 }
 
