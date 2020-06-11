@@ -29,17 +29,20 @@ data "template_file" "destroy_swagger_ui" {
 
 resource "null_resource" "swagger" {
   triggers = {
-    s3_acl             = var.s3_acl
-    s3_bucket_path     = var.s3_bucket_path
-    install_template    = data.template_file.install_swagger_ui.rendered
-    destroy_template   = data.template_file.destroy_swagger_ui.rendered
-    swagger_ui_version = local.swagger_ui_version
+    s3_acl                 = var.s3_acl
+    s3_bucket_path         = var.s3_bucket_path
+    install_template       = data.template_file.install_swagger_ui.rendered
+    destroy_template       = data.template_file.destroy_swagger_ui.rendered
+    swagger_ui_version     = local.swagger_ui_version
     openapi_spec_paths_sha = sha1(join(" ", [
       for path in var.openapi_spec_paths :
       file(path)
     ]))
     openapi_spec_urls = join(" ", var.openapi_spec_urls)
   }
+
+  # Deprecation warning being debated in below url
+  # https://github.com/hashicorp/terraform/issues/23679
 
   provisioner "local-exec" {
     command     = self.triggers.install_template
