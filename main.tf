@@ -31,7 +31,8 @@ resource "null_resource" "swagger" {
   triggers = {
     s3_acl             = var.s3_acl
     s3_bucket_path     = var.s3_bucket_path
-    template           = data.template_file.install_swagger_ui.rendered
+    install_template    = data.template_file.install_swagger_ui.rendered
+    destroy_template   = data.template_file.destroy_swagger_ui.rendered
     swagger_ui_version = local.swagger_ui_version
     openapi_spec_paths_sha = sha1(join(" ", [
       for path in var.openapi_spec_paths :
@@ -41,13 +42,13 @@ resource "null_resource" "swagger" {
   }
 
   provisioner "local-exec" {
-    command     = self.triggers.template
+    command     = self.triggers.install_template
     interpreter = var.interpreter
   }
 
   provisioner "local-exec" {
     when        = destroy
-    command     = self.triggers.template
+    command     = self.triggers.destroy_template
     interpreter = var.interpreter
   }
 }
