@@ -31,7 +31,7 @@ resource "null_resource" "swagger" {
   triggers = {
     s3_acl             = var.s3_acl
     s3_bucket_path     = var.s3_bucket_path
-    template           = data.template_file.install_swagger_ui.template
+    template           = data.template_file.install_swagger_ui.rendered
     swagger_ui_version = local.swagger_ui_version
     openapi_spec_paths_sha = sha1(join(" ", [
       for path in var.openapi_spec_paths :
