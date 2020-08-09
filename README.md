@@ -18,8 +18,9 @@
 Terraform module for installing swagger ui in an AWS S3 bucket.
 Can pass openapi specification paths and/or openapi specification urls.
 
-Passing openapi specification paths will upload the openapi specification paths
-to s3 and create a relative path in the swagger ui using the basename of the file.
+Passing openapi specification paths will upload the openapi specification files
+to s3 and create a relative path in the swagger ui using the basename of the path 
+(the name of the file).
 
 Passing openapi specification urls will create an absolute path in the
 swagger ui for the url specified.
