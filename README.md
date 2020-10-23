@@ -19,7 +19,7 @@ Terraform module for installing swagger ui in an AWS S3 bucket.
 Can pass openapi specification paths and/or openapi specification urls.
 
 Passing openapi specification paths will upload the openapi specification files
-to s3 and create a relative path in the swagger ui using the basename of the path 
+to s3 and create a relative path in the swagger ui using the basename of the path
 (the name of the file).
 
 Passing openapi specification urls will create an absolute path in the
@@ -34,6 +34,8 @@ is enabled in the location being referenced.
 Use in conjunction with CloudFront to create an globally, easily accessible swagger ui for services.
 
 Written using terraform .12.x.
+
+NOTE: See changelog if upgrading from .12.x to .13.x or above.
 
 Special thanks to https://gist.github.com/denniswebb for his swagger-ui tf gist.
 
