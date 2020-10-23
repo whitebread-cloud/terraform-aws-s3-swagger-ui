@@ -34,6 +34,7 @@ is enabled in the location being referenced.
 Use in conjunction with CloudFront to create an globally, easily accessible swagger ui for services.
 
 Written using terraform .12.x.
+Requires aws-cli.
 
 NOTE: See changelog if upgrading from .12.x to .13.x or above.
 

@@ -19,3 +19,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Remove install template as a trigger for destroying and installing swagger since there
   is no need to reinstall swagger if only the install template changed
+
+## [1.0.2] - 2020-08-08
+
+### Changed
+
+- Update README for clarification
+
+## [1.0.1] - 2020-06-11
+
+### Fixed
+
+- Fix installation with Linux by replacing CRLF with LF for every file
+
+## [1.0.0] - 2020-01-04
+
+### Added
+
+- Initial release. Add functionality to install swagger ui to an AWS S3 bucket
+
+[unreleased]: https://github.com/whitebread-cloud/terraform-aws-s3-swagger-ui/compare/v1.0.0...HEAD
+[1.0.3]: https://github.com/whitebread-cloud/terraform-aws-s3-swagger-ui/compare/v1.0.2...v1.0.3
+[1.0.2]: https://github.com/whitebread-cloud/terraform-aws-s3-swagger-ui/compare/v1.0.2...v1.0.1
+[1.0.1]: https://github.com/whitebread-cloud/terraform-aws-s3-swagger-ui/compare/v1.0.1...v1.0.0
+[1.0.0]: https://github.com/whitebread-cloud/terraform-aws-s3-swagger-ui/releases/tag/v1.0.0
